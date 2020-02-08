@@ -13,3 +13,13 @@ H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.P
 H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.csproj.GenerateResource.cache
 H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.exe
 H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.pdb
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\BouncyCastle.Crypto.dll
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\Google.Protobuf.dll
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\MySql.Data.dll
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\Renci.SshNet.dll
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\Ubiety.Dns.Core.dll
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\Google.Protobuf.xml
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\MySql.Data.xml
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\Renci.SshNet.xml
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.csproj.CopyComplete
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.exe.config

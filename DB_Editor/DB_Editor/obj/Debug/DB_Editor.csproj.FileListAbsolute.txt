@@ -23,3 +23,7 @@ H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\MySql.Data.
 H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\Renci.SshNet.xml
 H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.csproj.CopyComplete
 H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.exe.config
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\DB_Editor.exe.manifest
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\bin\Debug\DB_Editor.application
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.exe.manifest
+H:\Documents\GitHub\Hermesso_DB_Editor\DB_Editor\DB_Editor\obj\Debug\DB_Editor.application

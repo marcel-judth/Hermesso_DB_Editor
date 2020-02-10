@@ -36,6 +36,17 @@ namespace DB_Editor
             try
             {
                 this.Cursor = System.Windows.Input.Cursors.Wait;
+
+                try
+                {
+                    ConnectDB();
+                }
+                catch (Exception)
+                {
+                    this.lblMessage.Content = "Cannot connect to Server!";
+                    this.Cursor = System.Windows.Input.Cursors.Arrow;
+                    return;
+                }
                 this.fillDatagrid();
                 this.lblMessage.Content = "Times displayed in table!";
                 this.Cursor = System.Windows.Input.Cursors.Arrow;
@@ -70,10 +81,10 @@ namespace DB_Editor
                     return;
                 }
                 int numUpdates = Database.update(editedTime);
-                this.fillDatagrid();
                 this.lblMessage.Content = numUpdates + " row(s) updated!";
                 this.Cursor = System.Windows.Input.Cursors.Arrow;
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 this.Cursor = System.Windows.Input.Cursors.Arrow;
                 this.lblMessage.Content = ex.Message;
@@ -93,28 +104,16 @@ namespace DB_Editor
             string user = this.txtUser.Text;
             string password = this.txtPassword.Text;
 
-            server = "185.101.158.120";
-            database = "usr_web108_3";
-            user = "web108";
-            password = "@gvH68uG5";
-
+            //server = "185.101.158.120";
+            //database = "usr_web108_3";
+            //user = "web108";
+            //password = "@gvH68uG5";
 
             Database.connect(server, database, user, password);
         }
 
         private void fillDatagrid()
         {
-            try
-            {
-                ConnectDB();
-            }
-            catch (Exception)
-            {
-                this.lblMessage.Content = "Cannot connect to Server!";
-                this.Cursor = System.Windows.Input.Cursors.Arrow;
-                return;
-            }
-
             string compNr = this.txtCompanyNr.Text;
             string empNr = this.txtEmpNr.Text;
             List<EasybaseTime> times;

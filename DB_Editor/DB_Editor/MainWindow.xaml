@@ -31,6 +31,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -45,11 +46,12 @@
             <TextBox Grid.Column="5" Name="txtUser" Width="100" VerticalContentAlignment="Center"/>
             <Label Grid.Column="6" Margin="15, 0, 5, 0">Password:</Label>
             <TextBox Grid.Column="7" Name="txtPassword" Width="100" VerticalContentAlignment="Center"/>
-            <Label Grid.Column="8" Margin="15, 0, 5, 0">Company:</Label>
+            <Label Grid.Column="8" Margin="15, 0, 5, 0">Company-Nr:</Label>
             <TextBox Grid.Column="9" Name="txtCompanyNr"  Width="100" VerticalContentAlignment="Center"/>
             <Label Grid.Column="10" Margin="15, 0, 0, 0">Emp-Nr:</Label>
             <TextBox Grid.Column="11" Name="txtEmpNr"  Width="100" VerticalContentAlignment="Center"/>
             <Button x:Name="btnGetTimes" Content="Get Times" Grid.Column="12" Margin="20, 0, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="75" Click="BtnGetTimes_Click" />
+            <Button x:Name="btnCreateDB" Content="Create DB" Grid.Column="13" Margin="20, 0, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="75" Click="btnCreateDB_Click" />
         </Grid>
 
         <DataGrid Grid.Row="1" Name="datagrid"  CanUserSortColumns="True" Margin="40,24,44,34" ColumnWidth="*" AutoGeneratingColumn="Datagrid_AutoGeneratingColumn" CellEditEnding="Datagrid_CellEditEnding"/>

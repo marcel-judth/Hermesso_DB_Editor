@@ -8,13 +8,19 @@ namespace DataAccess
 {
     public class Database
     {
-        private static MySqlConnection connection;
-        private Database()
+        private string connectionString;
+        public Database(string server, string database, string userId, string password)
+        {
+            this.connectionString = "Server=" + server + "; Database=" + database + "; User Id=" + userId + "; Password=" + password + ";";
+        }
+
+        public Database()
         {
         }
 
-        public static List<EasybaseTime> get()
+        public List<EasybaseTime> get()
         {
+            MySqlConnection connection = this.connectToDB();
             MySqlCommand cmd = connection.CreateCommand();
             cmd.CommandText = "SELECT * from timeData";
 
@@ -40,8 +46,14 @@ namespace DataAccess
             return times;
         }
 
-        public static List<EasybaseTime> get(string companyNr)
+        public void setConnData(string server, string database, string userId, string password)
         {
+            this.connectionString = "Server=" + server + "; Database=" + database + "; User Id=" + userId + "; Password=" + password + ";";
+        }
+
+        public List<EasybaseTime> get(string companyNr)
+        {
+            MySqlConnection connection = this.connectToDB();
             MySqlCommand cmd = connection.CreateCommand();
             cmd.CommandText = "SELECT * from timeData WHERE companyNr = @compNr";
             cmd.Parameters.AddWithValue("@compNr", companyNr);
@@ -68,8 +80,9 @@ namespace DataAccess
             return times;
         }
 
-        public static List<EasybaseTime> get(string companyNr, string employeeNr)
+        public List<EasybaseTime> get(string companyNr, string employeeNr)
         {
+            MySqlConnection connection = this.connectToDB();
             MySqlCommand cmd = connection.CreateCommand();
             cmd.CommandText = "SELECT * from timeData WHERE companyNr = @compNr and empNr = @empNr";
             cmd.Parameters.AddWithValue("@compNr", companyNr);
@@ -97,9 +110,10 @@ namespace DataAccess
             return times;
         }
 
-        public static int update(EasybaseTime editedTime)
+        public int update(EasybaseTime editedTime)
         {
-            MySqlCommand cmd = connection.CreateCommand();
+            MySqlConnection connection = this.connectToDB();
+            MySqlCommand cmd = connectToDB().CreateCommand();
             cmd.CommandText = "UPDATE timeData SET exported = @newExported WHERE companyNr = @companyNr and empNr = @empNr and tdate = @tDate";
             cmd.Parameters.AddWithValue("@companyNr", editedTime.compNr);
             cmd.Parameters.AddWithValue("@empNr", editedTime.empNr);
@@ -110,20 +124,54 @@ namespace DataAccess
             return numRowsUpdated;
         }
 
-        public static MySqlConnection connect(string server, string database, string userId, string password)
+        public bool DBexists(string server, string database, string userId, string password)
         {
-            string connectionString = "Server=" + server + "; Database=" + database + "; User Id=" + userId + "; Password=" + password + ";";
+            bool functionReturnValue = false;
 
-            try
+            using (MySqlConnection dbconn = connect(server, userId, password))
             {
-                connection = new MySqlConnection(connectionString);
-                connection.Open();
-                return connection;
+                using (MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM information_schema.schemata WHERE SCHEMA_NAME=@dbName", dbconn))
+                {
+                    functionReturnValue = false;
+                    cmd.Parameters.AddWithValue("@dbName", database);
+                    dbconn.Open();
+                    if (int.Parse(cmd.ExecuteScalar().ToString()) != 0)
+                    {
+                        functionReturnValue = true;
+                    }
+                    dbconn.Close();
+                }
             }
-            catch (Exception ex)
+            return functionReturnValue;
+        }
+
+        public bool createDB(string server, string database, string userId, string password)
+        {
+            MySqlConnection conn = connect(server, userId, password);
+
+            //use different execute for this command.....see how you get a result from the command. im sorry i had to go to bed
+            MySqlCommand cmd = new MySqlCommand("CREATE DATABASE IF NOT EXISTS `" + database + "`;", conn);
+            if (int.Parse(cmd.ExecuteScalar().ToString()) != 0)
             {
-                throw ex;
+                return true;
             }
+            conn.Close();
+            return false;
+        }
+
+        public MySqlConnection connectToDB()
+        {
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+            return connection;
+        }
+
+        public MySqlConnection connect(string server, string userId, string password)
+        {
+            string connectionString = "server=" + server + ";uid=" + userId + ";pwd=" + password + ";";
+            MySqlConnection connection = new MySqlConnection(connectionString);
+            connection.Open();
+            return connection;
         }
     }
 }

@@ -25,10 +25,16 @@ namespace DB_Editor
     /// </summary>
     public partial class MainWindow : Window
     {
+        Database db;
         public MainWindow()
         {
             InitializeComponent();
             this.datagrid.AutoGenerateColumns = true;
+            db = new Database();
+            txtServer.Text = "185.101.158.120";
+            txtDatabase.Text = "usr_web108_3";
+            txtUser.Text = "web108";
+            txtPassword.Text = "@gvH68uG5";
         }
 
         private void BtnGetTimes_Click(object sender, RoutedEventArgs e)
@@ -36,20 +42,14 @@ namespace DB_Editor
             try
             {
                 this.Cursor = System.Windows.Input.Cursors.Wait;
-
-                try
-                {
-                    ConnectDB();
-                }
-                catch (Exception)
-                {
-                    this.lblMessage.Content = "Cannot connect to Server!";
-                    this.Cursor = System.Windows.Input.Cursors.Arrow;
-                    return;
-                }
+                db.setConnData(txtServer.Text, txtDatabase.Text, txtUser.Text, txtPassword.Text);
                 this.fillDatagrid();
                 this.lblMessage.Content = "Times displayed in table!";
                 this.Cursor = System.Windows.Input.Cursors.Arrow;
+            }
+            catch(MySqlException mysqlEx)
+            {
+                this.lblMessage.Content = "Can not connect to Server: " + mysqlEx.ToString();
             }
             catch (Exception ex)
             {
@@ -70,21 +70,16 @@ namespace DB_Editor
 
                 if (result)
                     editedTime.exported = dt;
-                try
-                {
-                    ConnectDB();
-                }
-                catch (Exception)
-                {
-                    this.lblMessage.Content = "Cannot connect to Server!";
-                    this.Cursor = System.Windows.Input.Cursors.Arrow;
-                    return;
-                }
-                int numUpdates = Database.update(editedTime);
+              
+                int numUpdates = db.update(editedTime);
                 this.lblMessage.Content = numUpdates + " row(s) updated!";
                 this.Cursor = System.Windows.Input.Cursors.Arrow;
             }
-            catch(Exception ex)
+            catch (MySqlException mysqlEx)
+            {
+                this.lblMessage.Content = "Can not connect to Server: " + mysqlEx.ToString();
+            }
+            catch (Exception ex)
             {
                 this.Cursor = System.Windows.Input.Cursors.Arrow;
                 this.lblMessage.Content = ex.Message;
@@ -97,33 +92,18 @@ namespace DB_Editor
                 e.Column.IsReadOnly = true; // Makes the column as read only
         }
 
-        private void ConnectDB()
-        {
-            string server = this.txtServer.Text;
-            string database = this.txtDatabase.Text;
-            string user = this.txtUser.Text;
-            string password = this.txtPassword.Text;
-
-            //server = "185.101.158.120";
-            //database = "usr_web108_3";
-            //user = "web108";
-            //password = "@gvH68uG5";
-
-            Database.connect(server, database, user, password);
-        }
-
         private void fillDatagrid()
         {
             string compNr = this.txtCompanyNr.Text;
             string empNr = this.txtEmpNr.Text;
             List<EasybaseTime> times;
             if (!compNr.Equals("") && !empNr.Equals(""))
-                times = Database.get(compNr, empNr);
+                times = db.get(compNr, empNr);
             else
                 if (!compNr.Equals("") && empNr.Equals(""))
-                times = Database.get(compNr);
+                times = db.get(compNr);
             else
-                times = Database.get();
+                times = db.get();
 
             CollectionViewSource source = new CollectionViewSource
             {
@@ -131,6 +111,27 @@ namespace DB_Editor
             };
             this.datagrid.ItemsSource = source.View;
             this.datagrid.Columns[4].CanUserSort = true;
+        }
+
+        private void btnCreateDB_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.Cursor = System.Windows.Input.Cursors.Wait;
+                if (!db.createDB(txtServer.Text, txtDatabase.Text, txtUser.Text, txtPassword.Text))
+                    lblMessage.Content = "Database created!";
+                else
+                    lblMessage.Content = "Database already exsists!";
+            }
+            catch (MySqlException mysqlEx)
+            {
+                this.lblMessage.Content = "Can not connect to server: " + mysqlEx.Message;
+            }
+            catch (Exception ex)
+            {
+                this.lblMessage.Content = ex.Message;
+            }
+            this.Cursor = System.Windows.Input.Cursors.Arrow;
         }
     }
 }

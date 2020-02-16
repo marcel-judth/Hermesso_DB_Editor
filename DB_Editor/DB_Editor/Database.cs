@@ -151,7 +151,7 @@ namespace DataAccess
 
             //use different execute for this command.....see how you get a result from the command. im sorry i had to go to bed
             MySqlCommand cmd = new MySqlCommand("CREATE DATABASE IF NOT EXISTS `" + database + "`;", conn);
-            if (int.Parse(cmd.ExecuteScalar().ToString()) != 0)
+            if (cmd.ExecuteNonQuery() != 0)
             {
                 return true;
             }

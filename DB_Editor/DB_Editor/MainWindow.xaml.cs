@@ -118,7 +118,7 @@ namespace DB_Editor
             try
             {
                 this.Cursor = System.Windows.Input.Cursors.Wait;
-                if (db.createDB(txtServer.Text, txtDatabase.Text, txtUser.Text, txtPassword.Text))
+                if (db.setUpserver(txtServer.Text, txtDatabase.Text, txtUser.Text, txtPassword.Text))
                     lblMessage.Content = "Database created!";
                 else
                     lblMessage.Content = "Database already exsists!";

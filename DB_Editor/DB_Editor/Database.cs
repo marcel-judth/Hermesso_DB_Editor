@@ -145,18 +145,31 @@ namespace DataAccess
             return functionReturnValue;
         }
 
-        public bool createDB(string server, string database, string userId, string password)
+        public bool setUpserver(string server, string database, string userId, string password)
         {
+            //try something with the connect. There are two 
+            string cmdString = "CREATE TABLE if not exists `timeData` (`companyNr` varchar(50) NOT NULL," +
+                " `empNr` varchar(50) NOT NULL, `tDate` datetime  NOT NULL, `isComing`  varchar(1) NOT NULL," +
+                " `exported` datetime NULL);";
+            bool created = !(this.DBexists(server, database, userId, password));
             MySqlConnection conn = connect(server, userId, password);
-
-            //use different execute for this command.....see how you get a result from the command. im sorry i had to go to bed
-            MySqlCommand cmd = new MySqlCommand("CREATE DATABASE IF NOT EXISTS `" + database + "`;", conn);
-            if (cmd.ExecuteNonQuery() != 0)
+            MySqlCommand cmd;
+            if (created)
             {
-                return true;
+                cmd = new MySqlCommand("CREATE DATABASE IF NOT EXISTS `" + database + "`;", conn);
+                cmd.ExecuteNonQuery();
+                created = true;
             }
+
+            //then create Table
+            conn.ChangeDatabase(database);
+            cmd = new MySqlCommand(cmdString, conn);
+
+            if (cmd.ExecuteNonQuery() > 0)
+                created = true;
+
             conn.Close();
-            return false;
+            return created;
         }
 
         public MySqlConnection connectToDB()

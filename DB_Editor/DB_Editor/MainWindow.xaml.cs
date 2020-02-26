@@ -31,10 +31,10 @@ namespace DB_Editor
             InitializeComponent();
             this.datagrid.AutoGenerateColumns = true;
             db = new Database();
-            txtServer.Text = "185.101.158.120";
-            txtDatabase.Text = "usr_web108_3";
-            txtUser.Text = "web108";
-            txtPassword.Text = "@gvH68uG5";
+            //txtServer.Text = "185.101.158.120";
+            //txtDatabase.Text = "usr_web108_3";
+            //txtUser.Text = "web108";
+            //txtPassword.Text = "@gvH68uG5";
         }
 
         private void BtnGetTimes_Click(object sender, RoutedEventArgs e)
@@ -49,12 +49,13 @@ namespace DB_Editor
             }
             catch(MySqlException mysqlEx)
             {
-                this.lblMessage.Content = "Can not connect to Server: " + mysqlEx.ToString();
+                this.lblMessage.Content = "Can not connect to Server: " + mysqlEx.Message;
+                this.Cursor = System.Windows.Input.Cursors.Arrow;
             }
             catch (Exception ex)
             {
                 this.Cursor = System.Windows.Input.Cursors.Arrow;
-                this.lblMessage.Content = ex.ToString();
+                this.lblMessage.Content = ex.Message;
             }
         }
 
@@ -71,13 +72,14 @@ namespace DB_Editor
                 if (result)
                     editedTime.exported = dt;
               
-                int numUpdates = db.update(editedTime);
+                int numUpdates = db.Update(editedTime);
                 this.lblMessage.Content = numUpdates + " row(s) updated!";
                 this.Cursor = System.Windows.Input.Cursors.Arrow;
             }
             catch (MySqlException mysqlEx)
             {
                 this.lblMessage.Content = "Can not connect to Server: " + mysqlEx.ToString();
+                this.Cursor = System.Windows.Input.Cursors.Arrow;
             }
             catch (Exception ex)
             {
@@ -98,12 +100,12 @@ namespace DB_Editor
             string empNr = this.txtEmpNr.Text;
             List<EasybaseTime> times;
             if (!compNr.Equals("") && !empNr.Equals(""))
-                times = db.get(compNr, empNr);
+                times = db.Get(compNr, empNr);
             else
                 if (!compNr.Equals("") && empNr.Equals(""))
-                times = db.get(compNr);
+                times = db.Get(compNr);
             else
-                times = db.get();
+                times = db.Get();
 
             CollectionViewSource source = new CollectionViewSource
             {
@@ -117,21 +119,26 @@ namespace DB_Editor
         {
             try
             {
+                lblMessage.Content = "...";
                 this.Cursor = System.Windows.Input.Cursors.Wait;
-                if (db.setUpserver(txtServer.Text, txtDatabase.Text, txtUser.Text, txtPassword.Text))
-                    lblMessage.Content = "Database created!";
-                else
-                    lblMessage.Content = "Database already exsists!";
+                db.SetUpserver(txtServer.Text, txtDatabase.Text, txtUser.Text, txtPassword.Text);
+                lblMessage.Content = "Server is ready!";
+                //if ()
+                //    lblMessage.Content = "Server is ready!";
+                //else
+                //    lblMessage.Content = "Database already exsists!";
+                this.Cursor = System.Windows.Input.Cursors.Arrow;
             }
             catch (MySqlException mysqlEx)
             {
                 this.lblMessage.Content = "Can not connect to server: " + mysqlEx.Message;
+                this.Cursor = System.Windows.Input.Cursors.Arrow;
             }
             catch (Exception ex)
             {
                 this.lblMessage.Content = ex.Message;
+                this.Cursor = System.Windows.Input.Cursors.Arrow;
             }
-            this.Cursor = System.Windows.Input.Cursors.Arrow;
         }
     }
 }
